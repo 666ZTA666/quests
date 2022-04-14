@@ -16,16 +16,17 @@ func main() {
 	var s string
 	for {
 		fmt.Println("введите строку, можно с пробелами")
-		s = readline(r)
+		s = readline(r) // считали, записали
 		if s != "" {
 			break
 		}
 	}
-	runes := []rune(strings.ToUpper(s))
-	fmt.Println(isUniq(runes))
+	runes := []rune(strings.ToUpper(s)) // поднимаем все руны в строке вверх
+	fmt.Println(isUniq(runes))          // выводим булевый результат
 
 }
 func isUniq(e []rune) bool {
+	// Тут мой ум иссяк делать мапы с символами и Я решил просто сделать цикл в цикле
 	for j := 0; j < len(e)-1; j++ {
 		for i := j + 1; i < len(e)-1; i++ {
 			if e[i] == e[j] {
@@ -36,6 +37,7 @@ func isUniq(e []rune) bool {
 	return true
 }
 
+// старое доброе чтение из bufio reader'а с удалением символов переноса каретки итд
 func readline(reader *bufio.Reader) string {
 	str, _, err := reader.ReadLine()
 	if err == io.EOF {

@@ -8,16 +8,16 @@ import (
 func main() {
 	//2. Остановка через сигнал из канала.
 	//Утечка горутины через sleep
-
-	closeChan := make(chan bool)
+	// небуферизированный канал, для блокировки горутины
+	closeChan := make(chan struct{})
 	myChan := make(chan bool)
-	go func(closeChan, myChan chan bool) {
+	go func(closeChan chan struct{}, myChan chan bool) {
 		fmt.Println("Work of go-routine is beginning")
-		myChan <- true
+		myChan <- true // начали работу, отправили сигнал
 		for i := 1; i < 500; i++ {
 			fmt.Println("Go-routine still working")
 			time.Sleep(500 * time.Millisecond)
-			if i%5 == 0 {
+			if i%5 == 0 { // спустя некоторое время решили прочитать из канала, в который никто не пишет и заснули
 				<-closeChan
 			}
 		}
@@ -25,10 +25,11 @@ func main() {
 
 	if <-myChan {
 		fmt.Println("I gonna kill you with no chanel signal")
+		// получаем сигнал о начале работы горутины и НЕ посылаем ей сигнал.
 	}
 	time.Sleep(2 * time.Second)
 	for i := 0; i < 5; i++ {
-		fmt.Println("Main is still working")
+		fmt.Println("Main is still working") // Демонстрация работы main
 		time.Sleep(500 * time.Millisecond)
 	}
 	// Метод 2.1 реализован. По факту горутина не завершает свою работы до конца работы всей программы,

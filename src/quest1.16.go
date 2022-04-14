@@ -8,10 +8,11 @@ import (
 )
 
 func main() {
+	// быстрая сортировка
 	var v, n int
 	for {
 		fmt.Println("введите количество элементов массива")
-		_, err := fmt.Scanln(&v)
+		_, err := fmt.Scanln(&v) // считали, записали 1
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -22,7 +23,7 @@ func main() {
 	}
 	for {
 		fmt.Println("введите максимальное значение элементов массива")
-		_, err := fmt.Scanln(&n)
+		_, err := fmt.Scanln(&n) // считали записали max
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -32,19 +33,22 @@ func main() {
 		}
 	}
 	arr := make([]int, v)
+	// создаем срез нужного размера
 	for i := 0; i < v; i++ {
-		arr[i] = rand.Intn(n)
+		arr[i] = rand.Intn(n) // заполняем числами нужного размера
 	}
-	fmt.Println(arr)
-	start := time.Now()
+	fmt.Println(arr)    // выводим массив до сортировки
+	start := time.Now() // отсекаем время
 	sort.Slice(arr, func(i, j int) bool {
 		return arr[i] < arr[j]
 	})
-	fmt.Println(arr)
-	fmt.Println(time.Now().Sub(start))
+	// Я ленивая козлина, ведь quickSort реализован в пакете sort
+	fmt.Println(arr)                   //выводим отсортированный массив
+	fmt.Println(time.Now().Sub(start)) // и время работы функции
 }
 
 /* "своя" реализация, переписал sort.Slice под int
+Я ленив чтобы придумывать велосипед, Я его скопирую)
 func quickSort(arr []int) []int {
 	qsort(arr, 0, len(arr)-1)
 

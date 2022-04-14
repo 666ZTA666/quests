@@ -5,45 +5,49 @@ import (
 	"sync"
 )
 
-// Counter - counter with RWmutex for parallel counting
+// Counter - счетчик с рв мьютексом
 type Counter struct {
 	sync.RWMutex
 	counter int
 }
 
-// NewCounter - constructor for counter
+// NewCounter - конструктор счетчика
 func NewCounter() *Counter {
 	return &Counter{}
 }
 
-// Inc - incrementing counter by 1
+// Inc - увеличитель счетчика
 func (c *Counter) Inc() {
 	c.Lock()
 	c.counter++
 	c.Unlock()
 }
 
-// Get - return value of counter
+// Get - возвращает значение счетчика
 func (c *Counter) Get() int {
 	c.RLock()
-	defer c.RUnlock()
 	s := c.counter
+	c.RUnlock()
 	return s
 }
 
 func main() {
 	//конкретно в данном примере RWmutex не нужен, так как конкурентного чтения счётчика нет.
 	c := NewCounter()
+	// создали новый счетчик
 	wg := new(sync.WaitGroup)
+	// создали группу ожидания
 
+	wg.Add(10000) // добавили 10000 членов группы ожидания
 	for i := 0; i < 10000; i++ {
-		wg.Add(1)
+		// после цикла на 10 000 итераций счетчик должен быть равен 10 000
 		go func(wg *sync.WaitGroup) {
-			defer wg.Done()
-			c.Inc()
+			c.Inc()   // увеличили счетчик
+			wg.Done() // убрали единичку из группы
 		}(wg)
 	}
 
-	wg.Wait()
+	wg.Wait() // ждем завершения всех горутин
+	// и выводим счетчик
 	fmt.Println(c.Get())
 }

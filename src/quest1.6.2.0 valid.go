@@ -8,18 +8,19 @@ import (
 func main() {
 	//2. Остановка через сигнал из канала.
 	// валидно
-
-	closeChan := make(chan bool)
+	// канал с сигналом о завершении работы
+	closeChan := make(chan struct{})
+	//канал с сигналом о начале работы горутины
 	myChan := make(chan bool)
-	go func(closeChan, myChan chan bool) {
+	go func(closeChan chan struct{}, myChan chan bool) {
 		fmt.Println("Work of go-routine is beginning")
-		myChan <- true
+		myChan <- true // начинаем работу, отправляем сигнал
 		for {
 			select {
-			case <-closeChan:
+			case <-closeChan: // ждем сигнала на закрытие и выходим
 				return
 			default:
-				fmt.Println("Go-routine still working")
+				fmt.Println("Go-routine still working") // Демонстрируем работу горутины
 				time.Sleep(500 * time.Millisecond)
 			}
 		}
@@ -27,10 +28,11 @@ func main() {
 
 	if <-myChan {
 		fmt.Println("I gonna kill you with chanel signal")
-		closeChan <- true
+		// сигнал о начале пришел, отправляем сигнал о завершении
+		closeChan <- struct{}{}
 	}
 	for i := 0; i < 5; i++ {
-		fmt.Println("Main is still working")
+		fmt.Println("Main is still working") // демонстрация работы main
 		time.Sleep(500 * time.Millisecond)
 	}
 	// метод 2.0 реализован

@@ -11,14 +11,14 @@ func main() {
 	// что ГП это не круто.
 
 	myChan := make(chan bool)
-	f := false
-	go func(myChan chan bool, f *bool) {
+	f := false                           // создаем переменную типа bool в которой по дефолту хранится 0 == false
+	go func(myChan chan bool, f *bool) { // переменную передаем по указателю, чтобы узнать об изменении.
 		fmt.Println("Work of go-routine is beginning")
-		myChan <- true
+		myChan <- true // начали работу, отправили сигнал
 		for {
-			if *f {
-				return
-			} else {
+			if *f { // в бесконечном цикле проверяем не поменялось ли значение переменной
+				return // если переменная стала true == 1, то уходим
+			} else { // иначе имитируем работу горутины
 				fmt.Println("Go-routine still working")
 				time.Sleep(500 * time.Millisecond)
 			}
@@ -27,13 +27,15 @@ func main() {
 
 	if <-myChan {
 		fmt.Println("I gonna kill you with pointer")
+		// получили сигнал о начале работы горутины, ждем чуток, и меняем значение переменной.
 		time.Sleep(1 * time.Second)
 		f = true
 	}
 
 	for i := 0; i < 5; i++ {
-		fmt.Println("Main is still working")
+		fmt.Println("Main is still working") // имитируем работу main
 		time.Sleep(500 * time.Millisecond)
 	}
-	// метод 3 реализован
+	// в принципе не сильно дорогой метод для закрытия кучи горутин, но закрыть канал пустых структур всё таки дешевле,
+	// но метод валидный и, если захотеть можно и ему найти применения.
 }
