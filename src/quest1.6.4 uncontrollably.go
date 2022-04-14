@@ -7,6 +7,7 @@ import (
 
 func main() {
 	//4. Рутина запаниковала
+	//не подконтрольно = не валидно
 	myChan := make(chan bool)
 	go func(myChan chan bool) {
 		defer func() {

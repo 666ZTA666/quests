@@ -9,6 +9,7 @@ import (
 func main() {
 	//0. Приложение померло.
 	//для реализаци первого(0) метода придется написать отдельную программу
+	//не подконтрольно = не валидно
 	myChan := make(chan bool)
 	go func(myChan chan bool) {
 		fmt.Println("Work of go-routine is beginning")

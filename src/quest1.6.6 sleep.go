@@ -8,6 +8,7 @@ import (
 
 func main() {
 	//6. Рутина ждёт разблокировки мьютекса.
+	//Утечка горутины через sleep
 	mu := new(sync.Mutex)
 	myChan := make(chan bool)
 	go func(myChan chan bool, mu *sync.Mutex) {

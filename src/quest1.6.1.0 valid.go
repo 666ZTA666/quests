@@ -10,6 +10,7 @@ func main() {
 	//1. Остановка через контекст: <-ctx.Done() прилетел (смотри документацию пакета context).
 	//Для реализации всех методов Я решил не рисковать, так как использую анонимные функции,
 	// и сделать по отдельному файлу.
+	//валидно
 	myChan := make(chan bool)
 	ctx, cancel := context.WithCancel(context.TODO())
 	go func(ctx context.Context, myChan chan bool) {
@@ -18,6 +19,7 @@ func main() {
 		for {
 			select {
 			case <-ctx.Done():
+				return
 			default:
 				fmt.Println("Go-routine still working")
 				time.Sleep(500 * time.Millisecond)

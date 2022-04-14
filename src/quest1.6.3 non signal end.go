@@ -7,6 +7,7 @@ import (
 
 func main() {
 	//3. Рутина завершила работу штатно.
+	// не валидно, сигнала из "вне" нет.
 
 	myChan := make(chan bool)
 	go func(myChan chan bool) {

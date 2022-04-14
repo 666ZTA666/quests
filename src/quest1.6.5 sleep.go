@@ -8,6 +8,7 @@ import (
 
 func main() {
 	//5. Рутина засыпает в ожидании sync.WaitGroup.
+	//Утечка горутины через sleep
 	wg := new(sync.WaitGroup)
 	wg.Add(2)
 	myChan := make(chan bool)

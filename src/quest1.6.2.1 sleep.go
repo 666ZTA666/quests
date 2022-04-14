@@ -7,6 +7,7 @@ import (
 
 func main() {
 	//2. Остановка через сигнал из канала.
+	//Утечка горутины через sleep
 
 	closeChan := make(chan bool)
 	myChan := make(chan bool)
