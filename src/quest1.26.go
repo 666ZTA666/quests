@@ -22,9 +22,11 @@ func main() {
 		}
 	}
 	runes := []rune(strings.ToUpper(s)) // поднимаем все руны в строке вверх
-	fmt.Println(isUniq(runes))          // выводим булевый результат
+	fmt.Println(isUniqMap(runes))       // выводим булевый результат
 
 }
+
+/*
 func isUniq(e []rune) bool {
 	// Тут мой ум иссяк делать мапы с символами и Я решил просто сделать цикл в цикле
 	for j := 0; j < len(e)-1; j++ {
@@ -35,6 +37,21 @@ func isUniq(e []rune) bool {
 		}
 	}
 	return true
+}
+
+Когда устал придумывать умные варианты
+*/
+func isUniqMap(a []rune) bool {
+	// создадим карту для хэширования данных
+	hash := make(map[rune]struct{})
+	for i := 0; i < len(a); i++ {
+		if _, ok := hash[a[i]]; ok { //Нашли повтор - выходим
+			return false
+		} else { // не нашли повтор, записываем значение
+			hash[a[i]] = struct{}{}
+		}
+	}
+	return true // если ни разу не вышли по повтору, то возвращаем true
 }
 
 // старое доброе чтение из bufio reader'а с удалением символов переноса каретки итд
